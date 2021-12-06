@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Button禁用的字体颜色 -->
+    <item android:color="disabled_font_color" android:state_enabled="false"></item>
+    <!-- Button正常的字体颜色 -->
+    <item android:color="normal_font_color" android:state_enabled="true"/>
+</selector>
