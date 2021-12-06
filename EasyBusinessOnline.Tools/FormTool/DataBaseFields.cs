@@ -44,6 +44,7 @@ namespace EasyBusinessOnline.Tools.FormTool
                     label1Result += desc;
                     label4Result += $@"IF NOT EXISTS(SELECT * FROM [SYSCOLUMNS] WHERE [ID]=OBJECT_ID('{dataField.table}') AND [NAME]='{dataField.field}')
     BEGIN
+ALTER TABLE {dataField.table} ADD {dataField.field} {dataField.type}
 	{desc}
 {index}
 print '成功增加字段{dataField.field}'

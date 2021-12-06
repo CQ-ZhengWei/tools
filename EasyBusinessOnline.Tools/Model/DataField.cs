@@ -13,5 +13,6 @@ namespace EasyBusinessOnline.Tools.Model
         public string table { get; set; }
         public int? len { get; set; }
         public string type { get; set; }
+        public string old { get; set; }
     }
 }
