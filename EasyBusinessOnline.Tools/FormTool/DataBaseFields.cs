@@ -168,7 +168,7 @@ print '成功增加字段{dataField.field}'
                         field = field.Substring(1, field.Length-2);
                     }
                     DataField dataField = new DataField() {
-                         desc=desc.Trim(), field= field, table=table,len=len,type=type
+                         desc=desc.Trim(), field= field, table=table,len=len,type=type, old= type
                     };
                     dataFieldInfo.dataFields.Add(dataField);
                 }
