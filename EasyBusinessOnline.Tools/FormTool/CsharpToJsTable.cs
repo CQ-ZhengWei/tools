@@ -194,32 +194,107 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
         }
         public void GetResult(Dictionary<string, string> fields)
         {
-            string allFields = string.Join(",", fields.Select(it => $"\"{GetFieldName(it.Key,out string _)}\""));
-            string json = string.Join("\r\n", fields.Select(it => $"\t{GetFieldName(it.Key, out string type).ToFirstLetterLower()}:\"{it.Value}\",{(string.IsNullOrEmpty(type)?"":"//"+type)}"));
-            string jsTable = string.Join("\r\n", fields.Select(it => $"<el-table-column prop=\"{GetFieldName(it.Key, out string _).ToFirstLetterLower()}\" label=\"{it.Value}\" align=\"center\"></el-table-column>"));
-
+            string allFields = string.Join(",", fields.Select(it => $"\"{GetFieldName(it.Key, it.Value, out string _, out string fieldName, out string desc,true)}\""));
+            string json = string.Join("\r\n", fields.Select(it => $"\t{GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc,true).ToFirstLetterLower()}:\"{it.Value}\",{(string.IsNullOrEmpty(type)?"":"//"+type)}"));
+            //string jsTable = string.Join("\r\n", fields.Select(it => $"<el-table-column prop=\"{GetFieldName(it.Key, out string _).ToFirstLetterLower()}\" label=\"{it.Value}\" align=\"center\"></el-table-column>"));
+            //<el-table-column show-overflow-tooltip align="left" prop="key" label="字典名"/>
+            string jsTable = string.Join("\r\n", fields.Select(it => $"<el-table-column prop=\"{GetFieldName(it.Key, it.Value, out string type,out string fieldName, out string desc).ToFirstLetterLower()}\" label=\"{desc}\" align=\"{(IsNumber(fieldName,type) ? "right" : "left")}\" {(IsShowOverflowTooltip(fieldName, type) ? "show-overflow-tooltip" : "")} {(GetMinWidth(fieldName,type,out int minWidth)?" min-width=\""+ minWidth + "\"":"")}></el-table-column>"));
             label1.Text = "{\r\n" + json + "\r\n}\r\n\r\n" + jsTable;
             textBox2.Text = allFields;
             label2.Text = string.Join("\r\n", fields.Select(it => $@"   
         /// <summary>
         /// {it.Value}
         /// </summary>
-        public string {GetFieldName(it.Key,out string type)} {{ get; set; }}"));
+        public string {GetFieldName(it.Key,it.Value,out string type,out string fieldName, out string desc)} {{ get; set; }}"));
         }
-        private string GetFieldName(string str, out string type)
+        private string GetFieldName(string str,string desc, out string type,out string fieldName,out string fieldDesc,bool notChangeFieldName=false)
         {
             string typeSplit = "__TYPE:";
             var index = str.IndexOf(typeSplit);
             if (index==-1)
             {
                 type = null;
+                fieldName = null;
+                fieldDesc = null;
                 return str;
             }
-            string fieldName = str.Substring(0, index);
+            fieldName = str.Substring(0, index);
+            string oldFieldName=fieldName;
             type = str.Substring(index+typeSplit.Length);
+            fieldDesc = null;
+            if ("CreateID" == fieldName)
+            {
+                fieldName = "Creator";
+                fieldDesc = "创建人";
+            }
+            else if ("ModifyID" == fieldName)
+            {
+                fieldName = "Modifier";
+                fieldDesc = "修改人";
+            }
+            if(fieldDesc==null)
+            fieldDesc = desc;
+            if (notChangeFieldName)
+            {
+                fieldName = oldFieldName;
+            }
             return fieldName;
         }
-
+        private bool IsNumber(string name, string type)
+        {
+            if (name == "RowIndex")
+            {
+                return false;
+            }
+            else if (name == "Creator")
+            {
+                return false;
+            }
+            else if (name == "Status")
+            {
+                return false;
+            }
+            if ("int" == type)
+            {
+                return true;
+            }
+            else if ("decimal" == type)
+            {
+                return true;
+            }
+            else if ("float" == type)
+            {
+                return true;
+            }
+            else if ("long" == type)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool IsShowOverflowTooltip(string name, string type)
+        {
+            if (type == "string")
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool GetMinWidth(string name, string type, out int minWidth)
+        {
+            if (type == "datetime?")
+            {
+                minWidth = 140;
+                return true;
+            }
+            else if (type == "datetime")
+            {
+                minWidth = 140;
+                return true;
+            }
+            minWidth = 0;
+            return false;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(label1.Text);
