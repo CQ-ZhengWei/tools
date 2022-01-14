@@ -181,9 +181,15 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
             Dictionary<string, string> fields = new Dictionary<string, string>();
             string desc = null;
             string name;
-            foreach (var item in temp)
+            foreach (var str in temp)
             {
+                var item = str;
                 Regex regexDesc = new Regex("//([\\s\\S]+)", RegexOptions.IgnoreCase);
+                if (item.IndexOf("=") != -1)
+                {
+                    item = "t."+str.Substring(0, str.IndexOf("="));//拼接注释
+                    item += str.Substring(str.IndexOf("//"));//拼接注释
+                }
                 Regex regexField = new Regex("[\\s\\S]+\\.([^,]+)[,]{0,1}[\\s\\S]*//[\\s\\S]+", RegexOptions.IgnoreCase);
                 desc = regexDesc.Matches(item)[0].Groups[1].Value.Trim();
                 var a = regexField.Matches(item)[0];
@@ -214,8 +220,8 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
             if (index==-1)
             {
                 type = null;
-                fieldName = null;
-                fieldDesc = null;
+                fieldName = str;
+                fieldDesc = desc;
                 return str;
             }
             fieldName = str.Substring(0, index);
@@ -232,7 +238,12 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
                 fieldName = "Modifier";
                 fieldDesc = "修改人";
             }
-            if(fieldDesc==null)
+            else if ("Reviewer" == fieldName)
+            {
+                fieldName = "ReviewerName";
+                fieldDesc = "审核人员";
+            }
+            if (fieldDesc==null)
             fieldDesc = desc;
             if (notChangeFieldName)
             {
