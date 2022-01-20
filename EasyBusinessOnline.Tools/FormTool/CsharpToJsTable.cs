@@ -160,7 +160,7 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
                     }
                     string type = regexField.Matches(item)[0].Groups[1].Value.Trim();
                     name = regexField.Matches(item)[0].Groups[2].Value.Trim();
-                    fields[name+"__TYPE:"+type] = desc;
+                    fields[name + "__TYPE:" + type] = desc;
                 }
             }
             return fields;
@@ -187,7 +187,7 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
                 Regex regexDesc = new Regex("//([\\s\\S]+)", RegexOptions.IgnoreCase);
                 if (item.IndexOf("=") != -1)
                 {
-                    item = "t."+str.Substring(0, str.IndexOf("="));//拼接注释
+                    item = "t." + str.Substring(0, str.IndexOf("="));//拼接注释
                     item += str.Substring(str.IndexOf("//"));//拼接注释
                 }
                 Regex regexField = new Regex("[\\s\\S]+\\.([^,]+)[,]{0,1}[\\s\\S]*//[\\s\\S]+", RegexOptions.IgnoreCase);
@@ -200,33 +200,34 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
         }
         public void GetResult(Dictionary<string, string> fields)
         {
-            string allFields = string.Join(",", fields.Select(it => $"\"{GetFieldName(it.Key, it.Value, out string _, out string fieldName, out string desc,true)}\""));
-            string json = string.Join("\r\n", fields.Select(it => $"\t{GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc,true).ToFirstLetterLower()}:\"{it.Value}\",{(string.IsNullOrEmpty(type)?"":"//"+type)}"));
+            string allFields = string.Join(",", fields.Select(it => $"\"{GetFieldName(it.Key, it.Value, out string _, out string fieldName, out string desc, out string sortable, true)}\""));
+            string json = string.Join("\r\n", fields.Select(it => $"\t{GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc, out string sortable, true).ToFirstLetterLower()}:\"{it.Value}\",{(string.IsNullOrEmpty(type) ? "" : "//" + type)}"));
             //string jsTable = string.Join("\r\n", fields.Select(it => $"<el-table-column prop=\"{GetFieldName(it.Key, out string _).ToFirstLetterLower()}\" label=\"{it.Value}\" align=\"center\"></el-table-column>"));
             //<el-table-column show-overflow-tooltip align="left" prop="key" label="字典名"/>
-            string jsTable = string.Join("\r\n", fields.Select(it => $"<el-table-column prop=\"{GetFieldName(it.Key, it.Value, out string type,out string fieldName, out string desc).ToFirstLetterLower()}\" label=\"{desc}\" align=\"{(IsNumber(fieldName,type) ? "right" : "left")}\" {(IsShowOverflowTooltip(fieldName, type) ? "show-overflow-tooltip" : "")} {(GetMinWidth(fieldName,type,out int minWidth)?" min-width=\""+ minWidth + "\"":"")}></el-table-column>"));
+            string jsTable = string.Join("\r\n", fields.Select(it => $"<el-table-column prop=\"{GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc, out string sortable).ToFirstLetterLower()}\" label=\"{desc}\" align=\"{(IsNumber(fieldName, type) ? "right" : "left")}\" {(IsShowOverflowTooltip(fieldName, type) ? "show-overflow-tooltip" : "")}{sortable}{(GetMinWidth(fieldName, type, out int minWidth) ? " min-width=\"" + minWidth + "\"" : "")}></el-table-column>"));
             label1.Text = "{\r\n" + json + "\r\n}\r\n\r\n" + jsTable;
             textBox2.Text = allFields;
             label2.Text = string.Join("\r\n", fields.Select(it => $@"   
         /// <summary>
         /// {it.Value}
         /// </summary>
-        public string {GetFieldName(it.Key,it.Value,out string type,out string fieldName, out string desc)} {{ get; set; }}"));
+        public string {GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc, out string sortable)} {{ get; set; }}"));
         }
-        private string GetFieldName(string str,string desc, out string type,out string fieldName,out string fieldDesc,bool notChangeFieldName=false)
+        private string GetFieldName(string str, string desc, out string type, out string fieldName, out string fieldDesc, out string sortable, bool notChangeFieldName = false)
         {
             string typeSplit = "__TYPE:";
             var index = str.IndexOf(typeSplit);
-            if (index==-1)
+            if (index == -1)
             {
                 type = null;
                 fieldName = str;
                 fieldDesc = desc;
+                AutoSortable(fieldName, out sortable);
                 return str;
             }
             fieldName = str.Substring(0, index);
-            string oldFieldName=fieldName;
-            type = str.Substring(index+typeSplit.Length);
+            string oldFieldName = fieldName;
+            type = str.Substring(index + typeSplit.Length);
             fieldDesc = null;
             if ("CreateID" == fieldName)
             {
@@ -243,13 +244,25 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
                 fieldName = "ReviewerName";
                 fieldDesc = "审核人员";
             }
-            if (fieldDesc==null)
-            fieldDesc = desc;
+            if (fieldDesc == null)
+                fieldDesc = desc;
             if (notChangeFieldName)
             {
                 fieldName = oldFieldName;
             }
+            AutoSortable(fieldName, out sortable);
             return fieldName;
+        }
+        private void AutoSortable(string name,out string sortable)
+        {
+            if ("RowIndex" == name || "ModifyID" == name || "Reviewer" == name || "CreateID" == name)
+            {
+                sortable = null;
+            }
+            else
+            {
+                sortable = " sortable=\"custom\"";
+            }
         }
         private bool IsNumber(string name, string type)
         {
