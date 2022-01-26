@@ -47,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel_all);
             this.Name = "Main";
-            this.Text = "重庆易商在线科技有限公司工具";
+            this.Text = "工具";
             this.Load += new System.EventHandler(this.Main_Load);
             this.ResumeLayout(false);
 

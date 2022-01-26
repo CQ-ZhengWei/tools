@@ -255,7 +255,8 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
         }
         private void AutoSortable(string name,out string sortable)
         {
-            if ("RowIndex" == name || "Creator" == name || "ReviewerName" == name || "Modifier" == name)
+            string[] fields = new string[] { "RowIndex", "Creator", "ReviewerName", "Modifier" };
+            if(fields.Select(it=>it.ToLower()).Contains(name.ToLower()))
             {
                 sortable = null;
             }
