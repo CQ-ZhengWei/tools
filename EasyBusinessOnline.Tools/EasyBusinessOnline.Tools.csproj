@@ -133,6 +133,12 @@
     <Compile Include="FormTool\Hump.Designer.cs">
       <DependentUpon>Hump.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTool\SetupFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTool\SetupFiles.Designer.cs">
+      <DependentUpon>SetupFiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTool\Hump.resx">
       <DependentUpon>Hump.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTool\SetupFiles.resx">
+      <DependentUpon>SetupFiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

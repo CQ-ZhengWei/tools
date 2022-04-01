@@ -138,9 +138,10 @@ namespace EasyBusinessOnline.Tools
             //        text = i+"drawable重命名",
             //    });
             //}
-            tools.Add(new ToolModel() { 
-                text="AndroidButton",
-                form=new AndroidButton()
+            tools.Add(new ToolModel()
+            {
+                text = "AndroidButton",
+                form = new AndroidButton()
             });
             tools.Add(new ToolModel()
             {
@@ -157,15 +158,22 @@ namespace EasyBusinessOnline.Tools
                 text = "Lines",
                 form = new Lines()
             });
-            tools.Add(new ToolModel() { 
-                text= "Json转换C#类",
-                form=new JsonToCsharp()
+            tools.Add(new ToolModel()
+            {
+                text = "Json转换C#类",
+                form = new JsonToCsharp()
             });
 
             tools.Add(new ToolModel()
             {
                 text = "C#类转Js",
                 form = new CsharpToJsTable()
+            });
+
+            tools.Add(new ToolModel()
+            {
+                text = "SetupFiles",
+                form = new SetupFiles()
             });
             return tools;
         }
