@@ -48,8 +48,7 @@ ALTER TABLE {dataField.table} ADD {dataField.field} {dataField.type}
 	{desc}
 {index}
 print '成功增加字段{dataField.field}'
-    END
-"; 
+    END"; 
                 }
             }
             label1.Text = label1Result;

@@ -175,6 +175,13 @@ namespace EasyBusinessOnline.Tools
                 text = "SetupFiles",
                 form = new SetupFiles()
             });
+
+            tools.Add(new ToolModel()
+            {
+                text = "DatabaseAddField",
+                form = new DatabaseAddField()
+            });
+            
             return tools;
         }
     }

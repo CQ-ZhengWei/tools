@@ -79,6 +79,12 @@
     <Compile Include="FormTool\CsharpToJsTable.Designer.cs">
       <DependentUpon>CsharpToJsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTool\DatabaseAddField.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTool\DatabaseAddField.Designer.cs">
+      <DependentUpon>DatabaseAddField.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTool\DataBaseFields.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTool\CsharpToJsTable.resx">
       <DependentUpon>CsharpToJsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTool\DatabaseAddField.resx">
+      <DependentUpon>DatabaseAddField.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTool\DataBaseFields.resx">
       <DependentUpon>DataBaseFields.cs</DependentUpon>
