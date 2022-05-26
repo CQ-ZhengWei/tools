@@ -212,6 +212,9 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
         /// {it.Value}
         /// </summary>
         public string {GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc, out string sortable)} {{ get; set; }}"));
+            label3.Text = string.Join("\r\n", fields.Select(it => {
+                GetFieldName(it.Key, it.Value, out string type, out string fieldName, out string desc, out string sortable);
+                return $"excelColumns.Add(new (\"{desc}\", it=>it.{fieldName}));"; }));
         }
         private string GetFieldName(string str, string desc, out string type, out string fieldName, out string fieldDesc, out string sortable, bool notChangeFieldName = false)
         {
@@ -339,6 +342,11 @@ namespace TD.Concrete.Model.Group.Models.OutModel.Report
         private void button3_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(label2.Text);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(label3.Text);
         }
     }
 }

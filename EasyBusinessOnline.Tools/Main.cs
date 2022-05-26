@@ -181,6 +181,12 @@ namespace EasyBusinessOnline.Tools
                 text = "DatabaseAddField",
                 form = new DatabaseAddField()
             });
+
+            tools.Add(new ToolModel()
+            {
+                text = "StringCompression",
+                form = new StringCompression()
+            });
             
             return tools;
         }
